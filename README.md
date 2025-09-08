@@ -1,110 +1,58 @@
 ---
 
-# Multi-Scale Attention Fusion Network with Anatomical Prior Learning (MAFN-APL)
+# 🧠 MAFN-APL: Multi-Scale Attention Fusion Network with Anatomical Prior Learning
 
-This repository contains the PyTorch implementation of **MAFN-APL**, a novel deep learning architecture for **neuroimaging-based disease classification**
-
-The model integrates **morphological priors**, **multi-scale attention**, **region-aware decomposition**, and **uncertainty-guided learning** to provide **robust predictions** with improved **interpretability**.
-
----
-
-## 🚀 Key Contributions
-
-* **Morphological Conv Block** – Mimics directional tumor/lesion growth patterns with anisotropic kernels and edge-preserving convolutions.
-* **Uncertainty-Guided Attention** – Bayesian attention module that quantifies uncertainty using Monte Carlo dropout and reparameterization.
-* **Multi-Scale Pyramid Attention** – Cross-scale communication via multi-head attention with hierarchical fusion.
-* **Anatomical Region Decomposer** – Learnable masks for cortical, subcortical, and ventricular regions with region-specific encoders.
-* **Cross-Region Attention Fusion** – Attention mechanism for integrating anatomical regions.
-* **Temporal Consistency Module** – Self-supervised learning with augmented views for stable feature learning.
-* **Composite Loss Function** – Combines classification, anatomical consistency, and uncertainty regularization losses.
-
-
-## 🧠 Model Overview
-
-The **MAFN-APL** consists of:
-
-1. **Anatomical Region Decomposer**
-
-   * Decomposes input into cortical, subcortical, and ventricular regions.
-   * Each region passes through morphological + multi-scale encoders.
-
-2. **Cross-Region Attention Fusion**
-
-   * Learns interactions between anatomical regions with multi-head attention.
-
-3. **Uncertainty-Guided Attention**
-
-   * Bayesian attention weights with reparameterization trick.
-
-4. **Temporal Consistency Module**
-
-   * Enforces feature stability using augmented input versions.
-
-5. **Adaptive Feature Aggregation + Classifier**
-
-   * Global pooling, hierarchical fusion, and classification head.
+This repository provides an **end-to-end PyTorch implementation** of the **MAFN-APL model** for **brain tumor classification**.
+The model introduces several **novel architectural components** and a **composite loss function** tailored for medical imaging tasks.
 
 ---
 
-## ▶️ Usage
+## 🚀 Key Features
 
-### Model Inference
+### 🏗️ Novel Architectural Components
 
-```python
-import torch
-from model import MAFN_APL
+* **Morphological Convolution Block**
+  Mimics **tumor growth patterns** with directional convolutions & edge-preserving operators.
 
-# Initialize model
-model = MAFN_APL(num_classes=4, base_channels=64)
+* **Uncertainty-Guided Attention (UGA)**
+  Bayesian attention with Monte Carlo dropout to **quantify predictive uncertainty**.
 
-# Example input (batch of MRI scans, shape [B, C, H, W])
-x = torch.randn(2, 3, 224, 224)
+* **Multi-Scale Pyramid Attention (MSPA)**
+  Extracts multi-resolution features and enables **cross-scale communication**.
 
-# Forward pass
-outputs = model(x)
+* **Anatomical Region Decomposer (ARD)**
+  Learns **cortical, subcortical, and ventricular masks** with region-specific encoders.
 
-print("Output shape:", outputs.shape)  # [B, num_classes]
-```
+* **Cross-Region Attention Fusion (CRAF)**
+  Models **inter-region dependencies** via multi-head attention fusion.
 
----
-
-### Loss Function
-
-```python
-import torch
-from loss import CompositeLoss
-from model import MAFN_APL
-
-model = MAFN_APL(num_classes=4)
-criterion = CompositeLoss(num_classes=4)
-
-x = torch.randn(4, 3, 224, 224)
-y = torch.randint(0, 4, (4,))
-
-outputs = model(x)
-loss, loss_dict = criterion(outputs, y, model)
-
-print("Total loss:", loss.item())
-print("Loss breakdown:", loss_dict)
-```
+* **Temporal Consistency Module (TCM)**
+  Enforces **self-supervised consistency** between augmented feature representations.
 
 ---
 
-## 📊 Loss Components
+### 🎯 Composite Loss Function
 
-1. **Classification Loss** → Standard cross-entropy.
-2. **Anatomical Consistency Loss** → Enforces smoothness in learnable anatomical masks.
-3. **Uncertainty Regularization** → Penalizes overconfident or unstable uncertainty estimates.
+The **`CompositeLoss`** combines three objectives:
 
-Final loss:
+1. **Cross-Entropy Loss** → for classification
+2. **Anatomical Consistency Loss** → enforces smooth anatomical masks
+3. **Uncertainty Regularization** → penalizes unstable attention distributions
+
+Final Loss:
 
 $$
-\mathcal{L}_{total} = \mathcal{L}_{cls} + 0.1 \cdot \mathcal{L}_{anat} + 0.05 \cdot \mathcal{L}_{uncert}
+L_{total} = L_{cls} + 0.1 \cdot L_{anat} + 0.05 \cdot L_{uncertainty}
 $$
 
----
+## 🧪 Research Contribution
 
+The **MAFN-APL** framework is designed for **robust brain tumor classification** with:
 
+* **Anatomical priors** to guide region-specific learning.
+* **Attention with uncertainty** for interpretable predictions.
+* **Consistency learning** for better generalization.
 
+This makes it well-suited for **MRI-based medical diagnosis**.
 
-Would you like me to also **combine both projects (Alzheimer MoE + MAFN-APL)** into a **unified repo** with a single README comparing both models (baseline vs. novel architecture), or should each remain with its own README?
+Would you like me to also **add diagrams** (like an architecture flowchart with ARD → CRAF → UGA → TCM → Classifier) in the README to make it visually clear for researchers?
