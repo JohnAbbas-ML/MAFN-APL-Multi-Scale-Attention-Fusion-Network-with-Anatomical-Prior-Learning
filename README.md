@@ -54,5 +54,3 @@ The **MAFN-APL** framework is designed for **robust brain tumor classification**
 * **Consistency learning** for better generalization.
 
 This makes it well-suited for **MRI-based medical diagnosis**.
-
-Would you like me to also **add diagrams** (like an architecture flowchart with ARD → CRAF → UGA → TCM → Classifier) in the README to make it visually clear for researchers?
